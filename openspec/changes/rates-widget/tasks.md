@@ -19,8 +19,13 @@
 
 ## 4. Deploy and install
 
-- [ ] 4.1 Enable GitHub Pages (default branch, root) with `gh api` or repo settings, then push; verify `https://<user>.github.io/defi-parse/` loads with live data
-- [ ] 4.2 Install from Chrome/Edge on Windows and add to the home screen on a phone; verify it opens standalone with its name and icon. If Chrome offers no install, add PNG icons and/or a minimal service worker per design Risks and re-verify
+- [x] 4.1 Enable GitHub Pages (default branch, root) with `gh api` or repo settings, then push; verify `https://<user>.github.io/defi-parse/` loads with live data
+- [x] 4.2 Install from Chrome/Edge on Windows and add to the home screen on a phone; verify it opens standalone with its name and icon. If Chrome offers no install, add PNG icons and/or a minimal service worker per design Risks and re-verify
+
+## 5. App window and deposit links
+
+- [x] 5.1 Add `url` to all 13 `watchlist.json` entries per design; render "Open in {platform} ↗" (`target="_blank" rel="noopener"`) in the expanded detail when present; verify `python test_defi_parser.py` still passes, each of the 13 links loads its pool page, and an entry without `url` shows no link
+- [ ] 5.2 Add `display_override: ["window-controls-overlay"]`, title-bar-area header styling with `app-region: drag`/`no-drag`, and the one-time `resizeTo(400, 760)` on first installed launch; verify in a normal tab nothing changes (no resize, same layout), Chrome still reports no installability errors, and after reinstalling on Windows the app opens at phone size with the header as its title bar
 
 ## Workflow follow-up
 

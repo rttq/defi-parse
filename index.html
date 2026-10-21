@@ -43,6 +43,23 @@
   }
   .btn:hover:not(:disabled) { border-color: var(--muted); }
   .btn:disabled { color: var(--muted); cursor: default; }
+  .btn.icon { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; }
+  .btn[aria-busy="true"] svg { animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .btn[aria-busy="true"] svg { animation: none; } }
+  /* Installed desktop app: the header becomes the title bar, next to the system window buttons. */
+  @media (display-mode: window-controls-overlay) {
+    header {
+      position: fixed; z-index: 1; margin: 0; padding: 0 8px 0 16px; background: var(--bg);
+      left: env(titlebar-area-x, 0); top: env(titlebar-area-y, 0);
+      width: env(titlebar-area-width, 100%); height: env(titlebar-area-height, 40px);
+      app-region: drag; -webkit-app-region: drag;
+    }
+    header > div { display: flex; align-items: baseline; gap: 8px; min-width: 0; white-space: nowrap; overflow: hidden; }
+    h1 { font-size: 0.875rem; }
+    header .btn { app-region: no-drag; -webkit-app-region: no-drag; width: 28px; height: 28px; }
+    .app { padding-top: calc(env(titlebar-area-height, 40px) + 12px); }
+  }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   section {
     background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
@@ -73,6 +90,7 @@
   .legend, .axis { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 0.75rem; }
   .legend i { display: inline-block; width: 14px; margin-right: 6px; vertical-align: middle; border-top: 2px solid var(--accent); }
   .legend i.dash { border-top: 2px dashed var(--muted); }
+  .open { display: block; margin-top: 12px; text-align: center; text-decoration: none; }
   .status { text-align: center; padding: 32px 16px; color: var(--soft); }
   .status .btn { margin-top: 12px; }
   footer { display: flex; justify-content: flex-end; }
@@ -85,7 +103,9 @@
       <h1>Stablecoin rates</h1>
       <div class="meta" id="updated">&nbsp;</div>
     </div>
-    <button class="btn" id="refresh">Refresh</button>
+    <button class="btn icon" id="refresh" aria-label="Refresh" title="Refresh">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+    </button>
   </header>
   <main id="list"><p class="status">Loading…</p></main>
   <footer><button class="btn" id="export" disabled>Export CSV</button></footer>
@@ -132,7 +152,7 @@ function parseHistory(text) {
 async function load() {
   const btn = $('#refresh');
   btn.disabled = true;
-  btn.textContent = 'Refreshing…';
+  btn.setAttribute('aria-busy', 'true');
   try {
     const watchlist = await getJSON('watchlist.json');
     const [charts, lendBorrow, history] = await Promise.all([
@@ -159,7 +179,7 @@ async function load() {
     $('#retry').onclick = load;
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Refresh';
+    btn.removeAttribute('aria-busy');
   }
 }
 
@@ -175,9 +195,11 @@ function spark(pts) {
   return `<svg class="spark" viewBox="0 0 56 24" preserveAspectRatio="none" aria-hidden="true" stroke="currentColor">${polyline(xy)}</svg>`;
 }
 
+const link = (w) => (w.url ? `<a class="btn open" href="${esc(w.url)}" target="_blank" rel="noopener">Open in ${esc(w.platform)} ↗</a>` : '');
+
 function detail(w, pts) {
   const supply = pts.slice(-90);
-  if (supply.length < 2) return '<div class="detail meta">Not enough history yet.</div>';
+  if (supply.length < 2) return `<div class="detail"><p class="meta">Not enough history yet.</p>${link(w)}</div>`;
   const start = supply[0].date;
   const borrowPts = (state.borrowHist.get(w.id) || []).filter((p) => p.date >= start);
   const borrow = borrowPts.length >= 2 ? borrowPts : null;
@@ -193,6 +215,7 @@ function detail(w, pts) {
       ${borrow ? polyline(xy(borrow), 'b') : ''}${polyline(xy(supply), 's')}
     </svg>
     <div class="axis"><span>${fmtDate(start)}</span><span>${fmtDate(end)}</span></div>
+    ${link(w)}
   </div>`;
 }
 
@@ -244,6 +267,12 @@ $('#list').addEventListener('click', (e) => {
   render();
   $(`.row[data-id="${btn.dataset.id}"]`).focus();
 });
+// First launch as an installed app: open at phone proportions once, then respect the user's size.
+if (matchMedia('(display-mode: standalone), (display-mode: window-controls-overlay)').matches) {
+  let sized = false;
+  try { sized = !!localStorage.getItem('sized'); localStorage.setItem('sized', '1'); } catch {}
+  if (!sized) window.resizeTo(400, 760);
+}
 $('#refresh').onclick = load;
 $('#export').onclick = exportCSV;
 load();

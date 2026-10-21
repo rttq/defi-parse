@@ -67,7 +67,36 @@ The borrow line uses `--muted` (dashed), so supply stays the visual focus. Dark 
 ### PWA manifest
 `name: "Stablecoin Rates"`, `short_name: "Rates"`, `display: "standalone"`, `start_url: "./"`, `background_color`/`theme_color` from the light palette, icon `icon.svg` (`sizes: "any"`). Add `<meta name="theme-color">` per color scheme and `apple-touch-icon` for iOS.
 
+### App-like desktop window (Window Controls Overlay)
+Manifest `display_override: ["window-controls-overlay"]` (falls back to `standalone`). In that mode the header uses `env(titlebar-area-*)` for its position and padding so it sits next to the system buttons, `app-region: drag` makes it the drag handle, and its buttons are `app-region: no-drag`. Browsers without the overlay ignore all of this.
+
+First-launch size: when `display-mode` is `standalone` or `window-controls-overlay` and no "sized" flag is in `localStorage`, call `window.resizeTo(400, 760)` once and set the flag. Chromium allows `resizeTo` in installed app windows; in normal tabs the media query is false, so nothing runs. `localStorage` access is wrapped in try/catch; without storage it would resize on each launch, which is acceptable.
+
+Alternative considered: a native wrapper (Tauri) for a real tray popup. Rejected for now by the user (option A chosen); it can wrap this same page later.
+
+Existing installs pick up manifest changes only after Chrome's periodic manifest update check. Reinstalling applies them immediately.
+
+### Deposit links
+`watchlist.json` gets a `url` per entry; the widget renders it as `<a target="_blank" rel="noopener">` inside the expanded detail, not on the row itself (the row is a `<button>`; a link nested in a button is invalid HTML and unreliable for taps). Labelled "Open in {platform} ↗".
+
+URLs verified 2026-10-21 in a browser (each loads the right pool page):
+
+| Pool | URL |
+|---|---|
+| Kamino JLP USDC | `kamino.com/borrow/reserve/DxXdAyU3…MjjMek/Ga4rZytC…6vSauXp` |
+| Kamino JLP USDT | `kamino.com/borrow/reserve/DxXdAyU3…MjjMek/2ov3CMqP…7w3BC1` |
+| Kamino SOL/BTC USDC | `kamino.com/borrow/reserve/7u3HeHxY…v5PfF/D6q6wuQS…BmgJ59` |
+| Kamino SOL/BTC USDT | `kamino.com/borrow/reserve/7u3HeHxY…v5PfF/H3t6qZ1J…Gn5e5S` |
+| Kamino RockawayX | `kamino.com/earn/lend/rockawayx-rwa-usdc/vault-overview` |
+| Euler eUSDC-2 / eUSDT-2 | `app.euler.finance/lend/{vault address}?network=1` |
+| Aave v3 (6 pools) | `app.aave.com/reserve-overview/?underlyingAsset={token}&marketName=proto_{mainnet,arbitrum,avalanche}_v3` |
+
+Kamino reserve addresses come from `api.kamino.finance/kamino-market/{market}/reserves/metrics`. The SOL/BTC market has several reserves labelled USDC; the one with the deposits ($124M) is `D6q6wuQS…`. The full URLs are in `watchlist.json`.
+
 ## Risks / Trade-offs
+
+- [Rates lag the protocol by up to an hour] → DefiLlama snapshots hourly. Short spikes (seen 2026-10-21: Kamino SOL/BTC USDC at ~30% on Kamino vs 4.44% in DefiLlama's last point) appear on the protocol page first. The deposit link is where the live rate is.
+- [Protocol URL formats change] → only that pool's link breaks; fix it in `watchlist.json`.
 
 - [Chrome's install prompt may require PNG icons or a service worker] → verified during apply. If it does, add 192/512 PNG icons and/or a minimal pass-through service worker, nothing more.
 - [iOS does not support SVG for `apple-touch-icon`] → a 180 px PNG is needed for a nice iOS icon. Add it in the same step if missing.

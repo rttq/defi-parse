@@ -82,6 +82,32 @@ The widget SHALL be served over HTTPS and SHALL be installable as a standalone a
 - **WHEN** the user adds it to the home screen on Android or iOS
 - **THEN** it launches full-screen from its icon
 
+### Requirement: Installed desktop window looks like an app
+When installed and opened as a desktop app, the widget SHALL draw its own title bar (its header, draggable, with the system window buttons) instead of the browser's frame where the browser supports it. On the first launch as an installed app it SHALL size its window to phone proportions. Later launches SHALL keep the size the user chose.
+
+#### Scenario: First launch on Windows
+- **WHEN** the user opens the installed app for the first time in Chrome or Edge
+- **THEN** the window is about 400×760 px and shows no browser title bar, only the widget header with the system minimize/maximize/close buttons
+
+#### Scenario: User resized the window
+- **WHEN** the user resizes the window and reopens the app
+- **THEN** it opens at the user's size, not 400×760
+
+#### Scenario: Opened in a normal browser tab
+- **WHEN** the page is opened in a regular tab
+- **THEN** no window resizing happens and the layout is unchanged
+
+### Requirement: Link to the pool's deposit page
+Each pool's expanded detail SHALL include a link that opens that pool's deposit page on the lending protocol in a new tab or the system browser. The link target SHALL come from the shared watchlist file.
+
+#### Scenario: Open Kamino pool
+- **WHEN** the user expands the Kamino JLP Market USDC row and follows its link
+- **THEN** the Kamino USDC reserve page of the JLP Market opens
+
+#### Scenario: Pool without a link
+- **WHEN** a watchlist entry has no link
+- **THEN** its detail shows no link and nothing else changes
+
 ### Requirement: Phone-first layout
 The layout SHALL be designed for a 360 px wide viewport with 16 px side padding, SHALL have no horizontal scrolling down to 320 px, and SHALL cap its content width on wide screens instead of stretching.
 
