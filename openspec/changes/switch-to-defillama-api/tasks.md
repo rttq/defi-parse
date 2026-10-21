@@ -14,7 +14,7 @@
 
 - [x] 2.1 `git init`, add `.gitignore` (`__pycache__/`, `defi_rates.csv`, `Claude-DeFi*.json` unless the user opts in to publishing the chat export); verify `git status` lists only the intended files
 - [x] 2.2 Add `.github/workflows/collect.yml` per design (daily cron + `workflow_dispatch`, `contents: write`, commit only on success and only if `history.csv` changed); verify the YAML parses
-- [ ] 2.3 Confirm with the user, then create the public GitHub repo with `gh repo create defi-parse --public` and push; verify the repo page shows the files
+- [x] 2.3 Confirm with the user, then create the public GitHub repo with `gh repo create defi-parse --public` and push; verify the repo page shows the files
 - [ ] 2.4 Trigger the workflow once with `gh workflow run collect.yml`; verify the run succeeds and a bot commit adds today's rows to `history.csv`
 
 ## Workflow follow-up
