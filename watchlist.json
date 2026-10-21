@@ -1,0 +1,15 @@
+[
+  {"id": "62649c90-e61a-4ffc-ba31-3d754b7461fc", "platform": "Kamino", "market": "JLP Market", "chain": "Solana", "asset": "USDC"},
+  {"id": "2d284e9c-7ae4-486f-88be-1584bdc3dd11", "platform": "Kamino", "market": "JLP Market", "chain": "Solana", "asset": "USDT"},
+  {"id": "d2141a59-c199-4be7-8d4b-c8223954836b", "platform": "Kamino", "market": "SOL/BTC Market", "chain": "Solana", "asset": "USDC"},
+  {"id": "546b3c0c-138d-4190-b46b-efa1765f1dd3", "platform": "Kamino", "market": "SOL/BTC Market", "chain": "Solana", "asset": "USDT"},
+  {"id": "8c4bbc10-5763-5d5b-8450-05ddd24b1c33", "platform": "Kamino", "market": "RockawayX RWA USDC", "chain": "Solana", "asset": "USDC"},
+  {"id": "a0f53224-c152-416e-8599-4563e70c6040", "platform": "Euler", "market": "eUSDC-2", "chain": "Ethereum", "asset": "USDC"},
+  {"id": "bc244917-e28c-4f10-bfa4-79bf90529023", "platform": "Euler", "market": "eUSDT-2", "chain": "Ethereum", "asset": "USDT"},
+  {"id": "aa70268e-4b52-42bf-a116-608b370f9501", "platform": "Aave v3", "market": "Core", "chain": "Ethereum", "asset": "USDC"},
+  {"id": "f981a304-bb6c-45b8-b0c5-fd2f515ad23a", "platform": "Aave v3", "market": "Core", "chain": "Ethereum", "asset": "USDT"},
+  {"id": "d9fa8e14-0447-4207-9ae8-7810199dfa1f", "platform": "Aave v3", "market": "Core", "chain": "Arbitrum", "asset": "USDC"},
+  {"id": "3a6cc030-738d-4e19-8a40-e63e9c4d5a6f", "platform": "Aave v3", "market": "Core", "chain": "Arbitrum", "asset": "USDT"},
+  {"id": "c4b05318-88af-4536-a834-f5fc8940d2d3", "platform": "Aave v3", "market": "Core", "chain": "Avalanche", "asset": "USDC"},
+  {"id": "e6692d08-85b6-4b50-952b-7c5c531862fe", "platform": "Aave v3", "market": "Core", "chain": "Avalanche", "asset": "USDT"}
+]

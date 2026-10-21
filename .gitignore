@@ -1,0 +1,5 @@
+__pycache__/
+defi_rates.csv
+.playwright-mcp/
+# Chat export with local paths; not published by default
+Claude-DeFi*.json
