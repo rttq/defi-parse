@@ -8,6 +8,7 @@ A phone-sized widget that shows USDC/USDT lending rates on Kamino, Euler and Aav
 
 ## What it shows
 
+**A community app for monitoring and comparing the APYs of the safest pools for deposits**
 - Current **supply APY** for 13 pools, and **borrow APY** where the pool allows borrowing
 - A 30-day supply trend per pool; tap a pool for a 90-day chart plus the recorded borrow trend
 - A link to each pool's page on the protocol, to go and lend
@@ -49,10 +50,3 @@ python defi_parser.py          # appends today's rows to history.csv
 python test_defi_parser.py     # self-check, prints "ok"
 python -m http.server          # then open http://localhost:8000
 ```
-
-## Project history
-
-This started in April 2025 as a vibe-coded Selenium script that scraped Kamino and Euler pages into a CSV. By October 2026 both scrapers returned wrong data without raising errors, because the sites had changed. The rebuild replaced scraping with DefiLlama's API and added the history and the widget. It was planned and tracked with [OpenSpec](https://github.com/Fission-AI/OpenSpec):
-
-- [`openspec/specs/`](openspec/specs): what the collector and the widget are required to do
-- [`openspec/changes/archive/`](openspec/changes/archive): the two changes with their proposals, designs and task lists
